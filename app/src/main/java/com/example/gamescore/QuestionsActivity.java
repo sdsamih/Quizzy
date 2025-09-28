@@ -13,22 +13,22 @@ import androidx.core.view.WindowInsetsCompat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class QuestoesActivity extends AppCompatActivity {
+public class QuestionsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_questoes);
+        setContentView(R.layout.activity_questions);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        ArrayList <Question> questoes = (ArrayList<Question>) getIntent().getSerializableExtra("questoes");
+        ArrayList <Question> questions = (ArrayList<Question>) getIntent().getSerializableExtra("questions");
 
-        for (Question q : questoes){
+        for (Question q : questions){
             Log.d("Questao", q.getQuestionText());
             Log.d("Alternativas", Arrays.toString(q.getOptions()));
         }

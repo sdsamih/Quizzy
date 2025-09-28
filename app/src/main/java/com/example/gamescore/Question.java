@@ -4,7 +4,7 @@ import java.io.Serializable;
 public class Question implements Serializable {
     private String questionText;
     private String[] options;
-    private int correctOptionIndex; //0-indexar
+    private int correctOptionIndex; //0-index
 
     public Question(String questionText, String[] options, int correctOptionIndex) {
         this.questionText = questionText;

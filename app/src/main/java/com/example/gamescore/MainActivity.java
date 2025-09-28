@@ -31,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
         EditText TxtNumQuestions = findViewById(R.id.txt_num_questions);
 
         BtnStart.setOnClickListener(v -> {
-            String numQuestoesStr = TxtNumQuestions.getText().toString();
-            Toast.makeText(this, numQuestoesStr + " Questões selecionadas", Toast.LENGTH_SHORT).show();
+            String numQuestoes = TxtNumQuestions.getText().toString();
+            Toast.makeText(this, numQuestoes + " Questões selecionadas", Toast.LENGTH_SHORT).show();
 
             ArrayList<Question> questions = new ArrayList<>();
             for(int i=0; i<10;i++){
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-            Intent intentStart = new Intent(this, QuestoesActivity.class);
+            Intent intentStart = new Intent(this, QuestionsActivity.class);
             intentStart.putExtra("questions", questions);
 
             startActivity(intentStart);
