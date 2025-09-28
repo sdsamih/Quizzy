@@ -38,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
         BtnStart.setOnClickListener(v -> {
             ApiService apiService = RetrofitClient.getClient().create(ApiService.class); //creates the client with ApiService endpoints
 
-            Call<Object> call = apiService.getQuestions(); //makes the request
+            int numQuestions = Integer.parseInt(TxtNumQuestions.getText().toString());
+            Call<Object> call = apiService.getQuestions(numQuestions); //makes the request
 
             call.enqueue(new Callback<Object>() {
                 @Override
