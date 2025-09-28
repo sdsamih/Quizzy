@@ -12,6 +12,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -25,16 +27,24 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        Button btnIniciar = findViewById(R.id.btn_iniciar);
-        EditText txtNumQuestoes = findViewById(R.id.txtNumQuestoes);
+        Button BtnStart = findViewById(R.id.btn_start);
+        EditText TxtNumQuestions = findViewById(R.id.txt_num_questions);
 
-        btnIniciar.setOnClickListener(v -> {
-            String numQuestoesStr = txtNumQuestoes.getText().toString();
+        BtnStart.setOnClickListener(v -> {
+            String numQuestoesStr = TxtNumQuestions.getText().toString();
             Toast.makeText(this, numQuestoesStr + " Questões selecionadas", Toast.LENGTH_SHORT).show();
 
+            ArrayList<Question> questions = new ArrayList<>();
+            for(int i=0; i<10;i++){
+                Question question = new Question("Pergunta "+ i, new String[]{"Alternativa 1", "Alternativa 2", "Alternativa 3", "Alternativa 4"}, 0);
+                questions.add(question);
+            }
 
 
-            Intent intentIniciar = new Intent(this, QuestoesActivity.class);
+            Intent intentStart = new Intent(this, QuestoesActivity.class);
+            intentStart.putExtra("questions", questions);
+
+            startActivity(intentStart);
         });
     }
 }
