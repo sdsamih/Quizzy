@@ -2,6 +2,7 @@ package com.example.gamescore;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -13,6 +14,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,7 +36,29 @@ public class MainActivity extends AppCompatActivity {
         EditText TxtNumQuestions = findViewById(R.id.txt_num_questions);
 
         BtnStart.setOnClickListener(v -> {
-            String numQuestoes = TxtNumQuestions.getText().toString();
+            ApiService apiService = RetrofitClient.getClient().create(ApiService.class); //creates the client with ApiService endpoints
+
+            Call<Object> call = apiService.getQuestions(); //makes the request
+
+            call.enqueue(new Callback<Object>() {
+                @Override
+                public void onResponse(Call<Object> call, Response<Object> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        Log.d("API", "Sucesso: " + response.body().toString());
+                    } else {
+                        Log.e("API", "Erro na resposta: " + response.code());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Object> call, Throwable t) {
+                    Log.e("API", "Erro na chamada: " + t.getMessage());
+                }
+            });
+
+
+
+            /*String numQuestoes = TxtNumQuestions.getText().toString();
             Toast.makeText(this, numQuestoes + " Questões selecionadas", Toast.LENGTH_SHORT).show();
 
             ArrayList<Question> questions = new ArrayList<>();
@@ -45,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
             intentStart.putExtra("questions", questions);
 
             startActivity(intentStart);
+            */
         });
     }
 }
