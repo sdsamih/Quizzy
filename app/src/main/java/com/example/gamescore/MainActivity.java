@@ -80,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
                             questions.add(question);
                         }
 
+                        questions.add(new Question("SEND", new String[]{}, 0)); //part of the band-aid fix to keep the send buton in the recyclerview
+
                         Intent intentStart = new Intent(MainActivity.this, QuestionsActivity.class);
                         intentStart.putExtra("questions", questions); //sends the Question array to the next Activity (QuestionsActivity)
                         startActivity(intentStart);

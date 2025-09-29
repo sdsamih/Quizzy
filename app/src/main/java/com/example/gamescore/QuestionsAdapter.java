@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.view.menu.MenuView;
@@ -18,7 +19,6 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.View
 
     public QuestionsAdapter(List<Question> questions) {
         this.questions=questions;
-
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -41,15 +41,33 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Question question = questions.get(position);
-        holder.questionTitle.setText(question.getQuestionText());
 
-        String[] options = question.getOptions(); //options stored in Question object
-        for(int i=0; i<options.length; i++){ //for each option in the Question
-            RadioButton radioButton = new RadioButton(holder.radioGroupOptions.getContext()); //creates a radio-button
-            radioButton.setText(options[i]); //sets the option text
-            holder.radioGroupOptions.addView(radioButton); //then binds it to the radioGroup
+        if("SEND".equals(questions.get(position).getQuestionText())){ //band-aid to add the button as a recyclerview item
+            holder.questionTitle.setVisibility(View.GONE);
+            holder.radioGroupOptions.setVisibility(View.GONE);
+
+            holder.itemView.findViewById(R.id.card_option).setVisibility(View.GONE); //shows the button instead of card
+            holder.itemView.findViewById(R.id.btn_send).setVisibility(View.VISIBLE);
+            holder.itemView.findViewById(R.id.btn_send).setOnClickListener(
+                    v -> Toast.makeText(holder.itemView.getContext(), "Enviar respostas", Toast.LENGTH_SHORT).show()
+            );
         }
+        else {
+            holder.itemView.findViewById(R.id.card_option).setVisibility(View.VISIBLE); //shows the card instead of button
+            holder.itemView.findViewById(R.id.btn_send).setVisibility(View.GONE);
+
+            Question question = questions.get(position);
+            holder.questionTitle.setText(question.getQuestionText());
+            holder.radioGroupOptions.removeAllViews();
+
+            String[] options = question.getOptions(); //options stored in Question object
+            for (int i = 0; i < options.length; i++) { //for each option in the Question
+                RadioButton radioButton = new RadioButton(holder.radioGroupOptions.getContext()); //creates a radio-button
+                radioButton.setText(options[i]); //sets the option text
+                holder.radioGroupOptions.addView(radioButton); //then binds it to the radioGroup
+            }
+        }
+
 
     }
 
