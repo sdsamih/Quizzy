@@ -32,8 +32,7 @@ public class QuestionsActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.recycler_questions);
         recyclerView.setLayoutManager(new LinearLayoutManager(this)); //show itens linearly and vertically
-        recyclerView.setAdapter( new QuestionsAdapter(questions)); //binds an QuestionsAdapter to the recyclerview
-
+        recyclerView.setAdapter( new QuestionsAdapter(questions)); //binds an QuestionsAdapter to the recyclervie
 
 
         for (Question q : questions){ //for debugging purposes
