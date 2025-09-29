@@ -39,8 +39,3 @@ O **Quizzy** é um aplicativo Android que busca questões de quiz em uma API pú
   - Requisições HTTP (okHttp, Retrofit ou outro) para comunicação com a API  
   - JSON para serialização / desserialização de dados  
   - Layouts XML para as interfaces  
-
----
-
-## 📁 Estrutura do Projeto (resumo)
-
