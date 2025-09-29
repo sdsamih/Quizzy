@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,9 +30,17 @@ public class QuestionsActivity extends AppCompatActivity {
 
         ArrayList <Question> questions = (ArrayList<Question>) getIntent().getSerializableExtra("questions");
 
+        RecyclerView recyclerView = findViewById(R.id.recycler_questions);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this)); //show itens linearly and vertically
+        recyclerView.setAdapter( new QuestionsAdapter(questions)); //binds an QuestionsAdapter to the recyclerview
+
+
+
         for (Question q : questions){ //for debugging purposes
             Log.d("Questao", q.getQuestionText());
             Log.d("Alternativas", Arrays.toString(q.getOptions()));
         }
+
+
     }
 }
