@@ -15,24 +15,10 @@ public class Question implements Serializable {
     public String getQuestionText() {
         return questionText;
     }
-
-    public void setQuestionText(String questionText) {
-        this.questionText = questionText;
-    }
-
     public String[] getOptions() {
         return options;
     }
-
-    public void setOptions(String[] options) {
-        this.options = options;
-    }
-
     public int getCorrectOptionIndex() {
         return correctOptionIndex;
-    }
-
-    public void setCorrectOptionIndex(int correctOptionIndex) {
-        this.correctOptionIndex = correctOptionIndex;
     }
 }

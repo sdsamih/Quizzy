@@ -28,7 +28,7 @@ public class QuestionsActivity extends AppCompatActivity {
 
         ArrayList <Question> questions = (ArrayList<Question>) getIntent().getSerializableExtra("questions");
 
-        for (Question q : questions){
+        for (Question q : questions){ //for debugging purposes
             Log.d("Questao", q.getQuestionText());
             Log.d("Alternativas", Arrays.toString(q.getOptions()));
         }

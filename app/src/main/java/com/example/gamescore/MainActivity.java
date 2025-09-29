@@ -14,6 +14,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,44 +40,61 @@ public class MainActivity extends AppCompatActivity {
         EditText TxtNumQuestions = findViewById(R.id.txt_num_questions);
 
         BtnStart.setOnClickListener(v -> {
-            ApiService apiService = RetrofitClient.getClient().create(ApiService.class); //creates the client with ApiService endpoints
+            ApiService apiService = RetrofitClient.getClient().create(ApiService.class); //creates the HTTP client with the set domain
 
-            int numQuestions = Integer.parseInt(TxtNumQuestions.getText().toString());
-            Call<Object> call = apiService.getQuestions(numQuestions); //makes the request
+            String numQuestions = TxtNumQuestions.getText().toString(); //number of questions set by the user
+            Call<QuestionResponse> call = apiService.getQuestions(Integer.parseInt(numQuestions)); //makes the request using the endpoint set in ApiService
 
-            call.enqueue(new Callback<Object>() {
+            call.enqueue(new Callback<QuestionResponse>() { //assincronously creates the request (so it doesn't freeze the UI thread)
                 @Override
-                public void onResponse(Call<Object> call, Response<Object> response) {
-                    if (response.isSuccessful() && response.body() != null) {
+                public void onResponse(Call<QuestionResponse> call, Response<QuestionResponse> response) { //if it gets a response
+                    if (response.isSuccessful() && response.body() != null) { //if the response says success (200)
                         Log.d("API", "Sucesso: " + response.body().toString());
-                    } else {
+
+                        Toast.makeText(MainActivity.this, numQuestions + " Questões selecionadas", Toast.LENGTH_SHORT).show();
+
+                        QuestionResponse questionResponse = response.body();
+                        ArrayList<Question> questions = new ArrayList<>(); //to-be filled Question array that will be used to populate QuestionActivity
+
+                        for (QuestionResult questionResult : questionResponse.getResults()) { //iterates trough the response's QuestionResults array to create the Question objects
+                            String questionText = questionResult.getQuestion(); //gets the question title
+
+                            String[] options = new String[4]; //creates the (to-be-filled) questions array
+
+                            Random random = new Random(); //Creates a random index for the correct option
+                            int correctOptionIndex = random.nextInt(4);
+
+                            List<String> shuffled_incorrect_options = questionResult.getIncorrectAnswers(); //creates the incorrect options list (arrays can't be shuffled directly)
+                            Collections.shuffle(shuffled_incorrect_options); //shuffles the incorrect options
+
+                            for (int i =0;i<4;i++){// fills the options array with the correct and incorrect options
+                                if(i == correctOptionIndex){
+                                    options[i] = questionResult.getCorrectAnswer();
+                                }
+                                else{
+                                    options[i] = shuffled_incorrect_options.remove(shuffled_incorrect_options.size()-1); //Pops the last option (should have used a stack here)
+                                }
+                            }
+
+                            Question question = new Question(questionText, options, correctOptionIndex); //creates and adds the Question object to the array
+                            questions.add(question);
+                        }
+
+                        Intent intentStart = new Intent(MainActivity.this, QuestionsActivity.class);
+                        intentStart.putExtra("questions", questions); //sends the Question array to the next Activity (QuestionsActivity)
+                        startActivity(intentStart);
+
+                    } else { //if the response says failure (not 200)
                         Log.e("API", "Erro na resposta: " + response.code());
                     }
                 }
 
                 @Override
-                public void onFailure(Call<Object> call, Throwable t) {
+                public void onFailure(Call<QuestionResponse> call, Throwable t) { //if fails to receive any response
                     Log.e("API", "Erro na chamada: " + t.getMessage());
                 }
             });
 
-
-
-            /*String numQuestoes = TxtNumQuestions.getText().toString();
-            Toast.makeText(this, numQuestoes + " Questões selecionadas", Toast.LENGTH_SHORT).show();
-
-            ArrayList<Question> questions = new ArrayList<>();
-            for(int i=0; i<10;i++){
-                Question question = new Question("Pergunta "+ i, new String[]{"Alternativa 1", "Alternativa 2", "Alternativa 3", "Alternativa 4"}, 0);
-                questions.add(question);
-            }
-
-
-            Intent intentStart = new Intent(this, QuestionsActivity.class);
-            intentStart.putExtra("questions", questions);
-
-            startActivity(intentStart);
-            */
         });
     }
 }

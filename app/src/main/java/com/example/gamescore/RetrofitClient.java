@@ -7,7 +7,7 @@ public class RetrofitClient {
     private static Retrofit client; //client that will make the requests
 
     public static Retrofit  getClient(){ //builder method that returns the client
-        if(client == null){ //Singleton
+        if(client == null){ //(Singleton)
             client = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
