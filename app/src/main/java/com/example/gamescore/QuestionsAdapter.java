@@ -3,6 +3,8 @@ package com.example.gamescore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,9 +23,12 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.View
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView questionTitle;
+        public RadioGroup radioGroupOptions;
+
         public ViewHolder(View itemView){
             super(itemView);
             questionTitle = itemView.findViewById(R.id.txt_question_title);
+            radioGroupOptions = itemView.findViewById(R.id.rdo_group_options);
         }
     }
 
@@ -38,6 +43,14 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Question question = questions.get(position);
         holder.questionTitle.setText(question.getQuestionText());
+
+        String[] options = question.getOptions(); //options stored in Question object
+        for(int i=0; i<options.length; i++){ //for each option in the Question
+            RadioButton radioButton = new RadioButton(holder.radioGroupOptions.getContext()); //creates a radio-button
+            radioButton.setText(options[i]); //sets the option text
+            holder.radioGroupOptions.addView(radioButton); //then binds it to the radioGroup
+        }
+
     }
 
     @Override
