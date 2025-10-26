@@ -29,6 +29,8 @@ public class QuestionsActivity extends AppCompatActivity {
         });
 
         ArrayList <Question> questions = (ArrayList<Question>) getIntent().getSerializableExtra("questions");
+        boolean isDailyChallenge = getIntent().getBooleanExtra("isDailyChallenge", false);
+
 
         RecyclerView recyclerView = findViewById(R.id.recycler_questions);
         recyclerView.setLayoutManager(new LinearLayoutManager(this)); //show itens linearly and vertically
