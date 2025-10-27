@@ -3,6 +3,7 @@ package com.example.gamescore;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,16 +95,16 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.View
                     card.setBackgroundColor(Color.RED);
                 }
             } else {
-                card.setBackgroundColor(Color.CYAN);
+                card.setBackgroundColor(Color.rgb(120, 170, 194));
             }
 
-            holder.questionTitle.setText(question.getQuestionText());
+            holder.questionTitle.setText(Html.fromHtml(question.getQuestionText(), Html.FROM_HTML_MODE_LEGACY));
             holder.radioGroupOptions.removeAllViews();
 
             String[] options = question.getOptions(); //options stored in Question object
             for (int i = 0; i < options.length; i++) {
                 RadioButton radioButton = new RadioButton(holder.radioGroupOptions.getContext());
-                radioButton.setText(options[i]);
+                radioButton.setText(Html.fromHtml(options[i], Html.FROM_HTML_MODE_LEGACY));
                 holder.radioGroupOptions.addView(radioButton);
 
                 if (i == question.getSelectedOptionIndex()) radioButton.setChecked(true);
