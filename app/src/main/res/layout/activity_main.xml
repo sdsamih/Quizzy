@@ -22,7 +22,6 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
         android:text="Número de questões"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,5 +58,15 @@
         app:layout_constraintEnd_toEndOf="@+id/btn_start"
         app:layout_constraintStart_toStartOf="@+id/btn_start"
         app:layout_constraintTop_toBottomOf="@+id/btn_start" />
+
+    <Button
+        android:id="@+id/btn_ranking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="Ver Ranking Diário"
+        app:layout_constraintEnd_toEndOf="@+id/btn_daily"
+        app:layout_constraintStart_toStartOf="@+id/btn_daily"
+        app:layout_constraintTop_toBottomOf="@+id/btn_daily" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

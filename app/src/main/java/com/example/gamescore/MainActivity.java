@@ -1,6 +1,8 @@
 package com.example.gamescore;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -13,10 +15,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
+import java.util.TimeZone;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,6 +30,11 @@ import retrofit2.Response;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String PREFS_NAME = "dailyPrefs";
+    private static final String KEY_LAST_SENT_DATE = "lastSentDate";
+
+    private Button BtnDaily;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +47,48 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        Button BtnDaily = findViewById(R.id.btn_daily);
+        BtnDaily = findViewById(R.id.btn_daily);
         Button BtnStart = findViewById(R.id.btn_start);
+        Button BtnRanking = findViewById(R.id.btn_ranking);
         EditText TxtNumQuestions = findViewById(R.id.txt_num_questions);
+
+        // check if daily challenge was completed today
+        checkDailyChallengeStatus();
 
         BtnStart.setOnClickListener(v -> startQuiz("quiz", TxtNumQuestions));
         BtnDaily.setOnClickListener(v -> startQuiz("daily", TxtNumQuestions));
+
+        BtnRanking.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, RankingActivity.class);
+            startActivity(intent);
+        });
+    }
+
+
+    private void checkDailyChallengeStatus() { //updates daily challenge button
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        String lastSentDate = prefs.getString(KEY_LAST_SENT_DATE, "");
+
+        String today = getCurrentDateGMTMinus3();
+
+        if (today.equals(lastSentDate)) {
+            BtnDaily.setEnabled(false);
+            BtnDaily.setBackgroundColor(Color.GRAY);
+        } else {
+            BtnDaily.setEnabled(true);
+        }
+    }
+    private void markDailyChallengeSent() {//updates sharedpreferences
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        prefs.edit().putString(KEY_LAST_SENT_DATE, getCurrentDateGMTMinus3()).apply();
+        checkDailyChallengeStatus();
+    }
+
+
+    private String getCurrentDateGMTMinus3() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT-3"));
+        return sdf.format(new Date());
     }
 
     private void startQuiz(String mode, EditText TxtNumQuestions) {
@@ -50,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         String url;
 
         if (isDailyChallenge) {
-            url = "http://10.0.2.2:5000";
+            url = "https://quizzy-server-aoof.onrender.com";
         }
         else{
             String numStr = TxtNumQuestions.getText().toString();
@@ -117,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if(isDailyChallenge) {
                         intentStart.putExtra("isDailyChallenge", true);
+                        markDailyChallengeSent();
                     }//sends the Question array to the next Activity (QuestionsActivity)
                     else{
                         intentStart.putExtra("isDailyChallenge", false);

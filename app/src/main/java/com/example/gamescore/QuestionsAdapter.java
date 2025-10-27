@@ -1,5 +1,7 @@
 package com.example.gamescore;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,8 +67,17 @@ public class QuestionsAdapter extends RecyclerView.Adapter<QuestionsAdapter.View
                 }
                 submitted = true;
                 holder.itemView.findViewById(R.id.btn_send).setVisibility(View.GONE);
-                Toast.makeText(holder.itemView.getContext(), "Score: " + correctAnswers + "/" + total, Toast.LENGTH_SHORT).show();
                 notifyDataSetChanged();
+
+                Toast.makeText(holder.itemView.getContext(), "Score: " + correctAnswers + "/" + total, Toast.LENGTH_SHORT).show();
+
+                Context context = holder.itemView.getContext();
+                Intent intent = new android.content.Intent(context, SubmitDailyActivity.class);
+                intent.putExtra("score", correctAnswers);
+                context.startActivity(intent);
+
+
+
             });
 
         } else { //question item
